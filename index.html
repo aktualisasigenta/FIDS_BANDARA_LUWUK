@@ -1,46 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <title>FIDS Bandara Luwuk</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin:0;
+  background:#0a5fb4;
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+.header {
+  background:#083f7a;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.header h1 {
+  margin:0;
+  font-size:24px;
+}
+.time {
+  text-align:right;
+}
+.time .clock {
+  font-size:28px;
+  font-weight:bold;
+}
+.time .date {
+  font-size:14px;
+}
+
+/* CONTENT */
+.content {
+  display:flex;
+  gap:12px;
+  padding:12px;
+}
+
+/* PANEL */
+.panel {
+  width:50%;
+  background:#1b6ec2;
+  padding:10px;
+  border-radius:6px;
+}
+.panel h2 {
+  margin:0 0 8px;
+  background:#ffcc00;
+  color:black;
+  padding:6px;
+  text-align:center;
+  font-size:16px;
+}
+
+/* TABLE */
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+th {
+  background:#003366;
+  padding:6px;
+}
+td {
+  padding:6px;
+  border-bottom:1px solid rgba(255,255,255,0.4);
+  text-align:center;
+}
+
+/* FOOTER */
+.footer {
+  text-align:center;
+  font-size:12px;
+  padding:6px;
+  opacity:0.8;
+}
+</style>
 </head>
 
-<body class="fids">
+<body>
 
 <div class="header">
-  <div class="title">UPBU SYUKURAN A. AMIR LUWUK</div>
-  <div class="clock" id="clock"></div>
-</div>
-
-<div class="board">
-  <div class="panel">
-    <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
-    <table id="departure">
-      <tr>
-        <th>PENERBANGAN</th>
-        <th>TUJUAN</th>
-        <th>JADWAL</th>
-        <th>STATUS</th>
-      </tr>
-    </table>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title">KEDATANGAN DOMESTIK</div>
-    <table id="arrival">
-      <tr>
-        <th>PENERBANGAN</th>
-        <th>ASAL</th>
-        <th>JADWAL</th>
-        <th>STATUS</th>
-      </tr>
-    </table>
+  <h1>UPBU SYUKURAN A. AMIR LUWUK</h1>
+  <div class="time">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date" id="date">--</div>
   </div>
 </div>
 
-<footer>© SYUKURAN AMINUDDIN AIRPORT</footer>
+<div class="content">
+  <div class="panel">
+    <h2>KEBERANGKATAN DOMESTIK</h2>
+    <table id="dep"></table>
+  </div>
 
-<script src="script.js"></script>
+  <div class="panel">
+    <h2>KEDATANGAN DOMESTIK</h2>
+    <table id="arr"></table>
+  </div>
+</div>
+
+<div class="footer">
+  © SYUKURAN AMINUDDIN AIRPORT
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzA_obTxCwN1IpcQRQDDekh9v6yPrt-aWR9U6v1u1AG5FIGF4QHHZRWyLfE1a_-_WJa/exec";
+
+function updateClock(){
+  const now = new Date();
+  document.getElementById("clock").innerText =
+    now.toLocaleTimeString("id-ID",{hour12:false});
+  document.getElementById("date").innerText =
+    now.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+}
+setInterval(updateClock,1000);
+updateClock();
+
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    const dep = document.getElementById("dep");
+    const arr = document.getElementById("arr");
+
+    dep.innerHTML = "<tr><th>PENERBANGAN</th><th>TUJUAN</th><th>JADWAL</th><th>STATUS</th></tr>";
+    arr.innerHTML = "<tr><th>PENERBANGAN</th><th>ASAL</th><th>JADWAL</th><th>STATUS</th></tr>";
+
+    data.forEach(f => {
+      const row = `
+        <tr>
+          <td>${f.maskapai}</td>
+          <td>${f.kota}</td>
+          <td>${f.jam}</td>
+          <td>${f.status}</td>
+        </tr>
+      `;
+      if (f.jenis === "keberangkatan") dep.innerHTML += row;
+      if (f.jenis === "kedatangan") arr.innerHTML += row;
+    });
+  })
+  .catch(err => {
+    document.body.innerHTML += "<p style='text-align:center'>Gagal memuat data</p>";
+    console.error(err);
+  });
+</script>
+
 </body>
 </html>
