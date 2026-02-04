@@ -1,16 +1,59 @@
+/* =========================
+   GLOBAL
+========================= */
 body {
   margin: 0;
   background: #0059b3;
   color: white;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
+/* =========================
+   HEADER
+========================= */
 .header {
   background: #003366;
-  padding: 15px;
+  padding: 14px 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.header-time {
+  text-align: right;
+}
+
+.clock {
   font-size: 28px;
+  font-weight: bold;
+}
+
+.date {
+  font-size: 14px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.content {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+}
+
+/* =========================
+   PANEL
+========================= */
+.panel {
+  flex: 1;
+  background: #1b6ec2;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .panel-title {
@@ -19,18 +62,118 @@ body {
   font-weight: bold;
   padding: 8px;
   text-align: center;
+  border-radius: 6px;
+  margin-bottom: 8px;
 }
 
+/* =========================
+   TABLE
+========================= */
 table {
   width: 100%;
-  font-size: 18px;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+th {
+  background: #003366;
+  padding: 8px;
+}
+
+td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+
+/* =========================
+   STATUS WARNA
+========================= */
+.status {
+  font-weight: bold;
 }
 
 .status.delay {
-  color: red;
+  color: #ff4444;
   animation: blink 1s infinite;
 }
 
+.status.check-in {
+  color: #ffeb3b;
+}
+
+.status.terjadwalkan,
+.status.on-time {
+  color: #00e676;
+}
+
+.status.boarding {
+  color: #00ffff;
+}
+
+.status.landed,
+.status.arrived {
+  color: #7cff00;
+}
+
+/* BLINK */
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  padding: 8px;
+  opacity: 0.85;
+}
+
+/* =========================
+   RESPONSIVE (HP)
+========================= */
+@media (max-width: 768px) {
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .header-title {
+    font-size: 18px;
+  }
+
+  .clock {
+    font-size: 20px;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+}
+
+/* =========================
+   HP KECIL
+========================= */
+@media (max-width: 480px) {
+
+  table {
+    font-size: 12px;
+  }
+
+  th {
+    font-size: 11px;
+  }
 }
