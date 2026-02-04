@@ -1,102 +1,46 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>FIDS UPBU SYUKURAN A. AMIR</title>
+<title>FIDS Bandara Luwuk</title>
 <link rel="stylesheet" href="style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="fids">
 
-<div class="fids-header">
-  <div class="fids-title">UPBU SYUKURAN A. AMIR LUWUK</div>
-  <div class="fids-datetime">
-    <div id="fids-date"></div>
-    <div id="fids-clock"></div>
-  </div>
+<div class="header">
+  <div class="title">UPBU SYUKURAN A. AMIR LUWUK</div>
+  <div class="clock" id="clock"></div>
 </div>
 
-<div class="fids-content">
-
-<div class="fids-panel">
-  <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
-  <table class="fids-table">
-    <thead>
+<div class="board">
+  <div class="panel">
+    <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
+    <table id="departure">
       <tr>
         <th>PENERBANGAN</th>
         <th>TUJUAN</th>
         <th>JADWAL</th>
         <th>STATUS</th>
       </tr>
-    </thead>
-    <tbody id="keberangkatan"></tbody>
-  </table>
-</div>
+    </table>
+  </div>
 
-<div class="fids-panel">
-  <div class="panel-title">KEDATANGAN DOMESTIK</div>
-  <table class="fids-table">
-    <thead>
+  <div class="panel">
+    <div class="panel-title">KEDATANGAN DOMESTIK</div>
+    <table id="arrival">
       <tr>
         <th>PENERBANGAN</th>
         <th>ASAL</th>
         <th>JADWAL</th>
         <th>STATUS</th>
       </tr>
-    </thead>
-    <tbody id="kedatangan"></tbody>
-  </table>
+    </table>
+  </div>
 </div>
 
-</div>
+<footer>© SYUKURAN AMINUDDIN AIRPORT</footer>
 
-<div class="watermark">© SYUKURAN AMINUDDIN AIRPORT</div>
-
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxqn7MHAf8MCqfhl-XOo3HwnmmlCUcoEHFXFk4xlXwFgEbwCggwdrkGFwlECj23hAZf8Q/exec";
-
-function loadData(){
-  fetch(API_URL)
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById("keberangkatan").innerHTML =
-        d.keberangkatan.map(f => `
-          <tr>
-            <td>${f.maskapai}</td>
-            <td>${f.kota}</td>
-            <td>${f.jam}</td>
-            <td class="status ${f.status.toLowerCase()}">${f.status}</td>
-          </tr>
-        `).join("");
-
-      document.getElementById("kedatangan").innerHTML =
-        d.kedatangan.map(f => `
-          <tr>
-            <td>${f.maskapai}</td>
-            <td>${f.kota}</td>
-            <td>${f.jam}</td>
-            <td class="status ${f.status.toLowerCase()}">${f.status}</td>
-          </tr>
-        `).join("");
-    });
-}
-
-setInterval(loadData, 5000);
-loadData();
-</script>
-
-<script>
-function updateClock(){
-  const now = new Date();
-  document.getElementById("fids-clock").innerText =
-    now.toLocaleTimeString("id-ID", {hour12:false});
-  document.getElementById("fids-date").innerText =
-    now.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
-}
-setInterval(updateClock,1000);
-updateClock();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
