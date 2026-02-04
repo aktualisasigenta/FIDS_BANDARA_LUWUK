@@ -2,57 +2,96 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>FIDS Bandara Luwuk</title>
+<title>FIDS - UPBU Syukuran Aminuddin Amir Luwuk</title>
+<link rel="stylesheet" href="/static/style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-  background:#0a5fb4;
-  color:white;
-  font-family:Arial, Helvetica, sans-serif;
-}
-table {
-  width:100%;
-  border-collapse:collapse;
-}
-th, td {
-  border-bottom:1px solid #fff;
-  padding:8px;
-  text-align:center;
-}
-</style>
 </head>
-<body>
 
-<h2>KEBERANGKATAN</h2>
-<table id="dep"></table>
+<body class="fids-tv">
 
-<h2>KEDATANGAN</h2>
-<table id="arr"></table>
+<!-- HEADER -->
+<div class="tv-header">
+  <div class="tv-title">
+    UPBU SYUKURAN A. AMIR LUWUK
+  </div>
+  <div class="tv-clock">
+    <span id="clock"></span>
+  </div>
+</div>
 
+<!-- CONTENT -->
+<div class="tv-content">
+
+  <!-- KEBERANGKATAN -->
+  <div class="tv-panel">
+    <div class="tv-panel-title">KEBERANGKATAN DOMESTIK</div>
+    <table class="tv-table">
+      <thead>
+        <tr>
+          <th>PENERBANGAN</th>
+          <th>TUJUAN</th>
+          <th>JADWAL</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in keberangkatan %}
+        <tr>
+          <td>{{ f.maskapai }}</td>
+          <td>{{ f.kota }}</td>
+          <td>{{ f.jam }}</td>
+          <td class="status {{ f.status|lower|replace(' ','-') }}">
+            {{ f.status }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- KEDATANGAN -->
+  <div class="tv-panel">
+    <div class="tv-panel-title">KEDATANGAN DOMESTIK</div>
+    <table class="tv-table">
+      <thead>
+        <tr>
+          <th>PENERBANGAN</th>
+          <th>ASAL</th>
+          <th>JADWAL</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in kedatangan %}
+        <tr>
+          <td>{{ f.maskapai }}</td>
+          <td>{{ f.kota }}</td>
+          <td>{{ f.jam }}</td>
+          <td class="status {{ f.status|lower|replace(' ','-') }}">
+            {{ f.status }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- WATERMARK -->
+<div class="tv-watermark">
+  © SYUKURAN AMINUDDIN AIRPORT
+</div>
+
+<!-- JAM REALTIME -->
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzA_obTxCwN1IpcQRQDDekh9v6yPrt-aWR9U6v1u1AG5FIGF4QHHZRWyLfE1a_-_WJa/exec";
-
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    const dep = document.getElementById("dep");
-    const arr = document.getElementById("arr");
-
-    dep.innerHTML = "<tr><th>Maskapai</th><th>Tujuan</th><th>Jam</th><th>Status</th></tr>";
-    arr.innerHTML = "<tr><th>Maskapai</th><th>Asal</th><th>Jam</th><th>Status</th></tr>";
-
-    data.forEach(f => {
-      const row = `<tr>
-        <td>${f.maskapai}</td>
-        <td>${f.kota}</td>
-        <td>${f.jam}</td>
-        <td>${f.status}</td>
-      </tr>`;
-
-      if (f.jenis === "keberangkatan") dep.innerHTML += row;
-      if (f.jenis === "kedatangan") arr.innerHTML += row;
-    });
-  });
+function updateClock(){
+  const now = new Date();
+  const time = now.toLocaleTimeString("id-ID", { hour12: false });
+  document.getElementById("clock").innerHTML = time + " WITA";
+}
+setInterval(updateClock, 1000);
+updateClock();
 </script>
 
 </body>
