@@ -2,95 +2,99 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>FIDS - UPBU Syukuran Aminuddin Amir Luwuk</title>
-<link rel="stylesheet" href="/static/style.css">
+<title>FIDS UPBU SYUKURAN A. AMIR</title>
+<link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body class="fids-tv">
+<body class="fids">
 
-<!-- HEADER -->
-<div class="tv-header">
-  <div class="tv-title">
-    UPBU SYUKURAN A. AMIR LUWUK
-  </div>
-  <div class="tv-clock">
-    <span id="clock"></span>
+<div class="fids-header">
+  <div class="fids-title">UPBU SYUKURAN A. AMIR LUWUK</div>
+  <div class="fids-datetime">
+    <div id="fids-date"></div>
+    <div id="fids-clock"></div>
   </div>
 </div>
 
-<!-- CONTENT -->
-<div class="tv-content">
+<div class="fids-content">
 
-  <!-- KEBERANGKATAN -->
-  <div class="tv-panel">
-    <div class="tv-panel-title">KEBERANGKATAN DOMESTIK</div>
-    <table class="tv-table">
-      <thead>
-        <tr>
-          <th>PENERBANGAN</th>
-          <th>TUJUAN</th>
-          <th>JADWAL</th>
-          <th>STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for f in keberangkatan %}
-        <tr>
-          <td>{{ f.maskapai }}</td>
-          <td>{{ f.kota }}</td>
-          <td>{{ f.jam }}</td>
-          <td class="status {{ f.status|lower|replace(' ','-') }}">
-            {{ f.status }}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="fids-panel">
+  <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
+  <table class="fids-table">
+    <thead>
+      <tr>
+        <th>PENERBANGAN</th>
+        <th>TUJUAN</th>
+        <th>JADWAL</th>
+        <th>STATUS</th>
+      </tr>
+    </thead>
+    <tbody id="keberangkatan"></tbody>
+  </table>
+</div>
 
-  <!-- KEDATANGAN -->
-  <div class="tv-panel">
-    <div class="tv-panel-title">KEDATANGAN DOMESTIK</div>
-    <table class="tv-table">
-      <thead>
-        <tr>
-          <th>PENERBANGAN</th>
-          <th>ASAL</th>
-          <th>JADWAL</th>
-          <th>STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for f in kedatangan %}
-        <tr>
-          <td>{{ f.maskapai }}</td>
-          <td>{{ f.kota }}</td>
-          <td>{{ f.jam }}</td>
-          <td class="status {{ f.status|lower|replace(' ','-') }}">
-            {{ f.status }}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="fids-panel">
+  <div class="panel-title">KEDATANGAN DOMESTIK</div>
+  <table class="fids-table">
+    <thead>
+      <tr>
+        <th>PENERBANGAN</th>
+        <th>ASAL</th>
+        <th>JADWAL</th>
+        <th>STATUS</th>
+      </tr>
+    </thead>
+    <tbody id="kedatangan"></tbody>
+  </table>
+</div>
 
 </div>
 
-<!-- WATERMARK -->
-<div class="tv-watermark">
-  © SYUKURAN AMINUDDIN AIRPORT
-</div>
+<div class="watermark">© SYUKURAN AMINUDDIN AIRPORT</div>
 
-<!-- JAM REALTIME -->
+<script>
+const API_URL = "PASTE_URL_APPS_SCRIPT_DI_SINI";
+
+function loadData(){
+  fetch(API_URL)
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("keberangkatan").innerHTML =
+        d.keberangkatan.map(f => `
+          <tr>
+            <td>${f.maskapai}</td>
+            <td>${f.kota}</td>
+            <td>${f.jam}</td>
+            <td class="status ${f.status.toLowerCase()}">${f.status}</td>
+          </tr>
+        `).join("");
+
+      document.getElementById("kedatangan").innerHTML =
+        d.kedatangan.map(f => `
+          <tr>
+            <td>${f.maskapai}</td>
+            <td>${f.kota}</td>
+            <td>${f.jam}</td>
+            <td class="status ${f.status.toLowerCase()}">${f.status}</td>
+          </tr>
+        `).join("");
+    });
+}
+
+setInterval(loadData, 5000);
+loadData();
+</script>
+
 <script>
 function updateClock(){
   const now = new Date();
-  const time = now.toLocaleTimeString("id-ID", { hour12: false });
-  document.getElementById("clock").innerHTML = time + " WITA";
+  document.getElementById("fids-clock").innerText =
+    now.toLocaleTimeString("id-ID", {hour12:false});
+  document.getElementById("fids-date").innerText =
+    now.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
 }
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
 updateClock();
 </script>
 
