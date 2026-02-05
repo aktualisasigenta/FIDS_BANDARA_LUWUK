@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>FIDS Bandara Luwuk</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- WAJIB untuk fullscreen -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- MOBILE FULLSCREEN -->
+<meta name="theme-color" content="#003366">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -27,13 +34,17 @@
   <!-- KEBERANGKATAN -->
   <div class="panel">
     <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
-    <table id="dep"></table>
+    <div class="table-wrap">
+      <table id="dep"></table>
+    </div>
   </div>
 
   <!-- KEDATANGAN -->
   <div class="panel">
     <div class="panel-title">KEDATANGAN DOMESTIK</div>
-    <table id="arr"></table>
+    <div class="table-wrap">
+      <table id="arr"></table>
+    </div>
   </div>
 
 </div>
@@ -107,6 +118,13 @@ fetch(API_URL)
     console.error(err);
     document.body.innerHTML += "<p style='text-align:center'>Gagal memuat data</p>";
   });
+
+/* FULLSCREEN AUTO (TV / KIOSK) */
+document.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(()=>{});
+  }
+});
 </script>
 
 </body>
