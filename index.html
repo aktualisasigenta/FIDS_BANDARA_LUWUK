@@ -4,54 +4,60 @@
 <meta charset="UTF-8">
 <title>FIDS Bandara Luwuk</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!-- WAJIB untuk fullscreen -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- MOBILE FULLSCREEN -->
+<meta name="theme-color" content="#003366">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="app">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-title">
-      ✈ UPBU SYUKURAN A. AMIR LUWUK
-    </div>
-    <div class="header-time">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="date" id="date">--</div>
-    </div>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">
+   ✈ UPBU SYUKURAN A. AMIR LUWUK
   </div>
+  <div class="header-time">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date" id="date">--</div>
+  </div>
+</div>
 
-  <!-- CONTENT -->
-  <div class="content">
+<!-- CONTENT -->
+<div class="content">
 
-    <!-- KEBERANGKATAN -->
-    <div class="panel">
-      <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
+  <!-- KEBERANGKATAN -->
+  <div class="panel">
+    <div class="panel-title">KEBERANGKATAN DOMESTIK</div>
+    <div class="table-wrap">
       <table id="dep"></table>
     </div>
+  </div>
 
-    <!-- KEDATANGAN -->
-    <div class="panel">
-      <div class="panel-title">KEDATANGAN DOMESTIK</div>
+  <!-- KEDATANGAN -->
+  <div class="panel">
+    <div class="panel-title">KEDATANGAN DOMESTIK</div>
+    <div class="table-wrap">
       <table id="arr"></table>
     </div>
-
   </div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    © SYUKURAN AMINUDDIN AIRPORT
-  </div>
+</div>
 
+<!-- FOOTER -->
+<div class="footer">
+  © SYUKURAN AMINUDDIN AIRPORT
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby2PQGqkhXwJ-YZiTI7IK48ZCFPgCvDuIqJvTMJJvoIyVCYSwZ-e6caAqk_WGksaO1dyg/exec";
 
-/* JAM */
+/* JAM REALTIME */
 function updateClock(){
   const now = new Date();
   document.getElementById("clock").innerText =
@@ -67,7 +73,7 @@ function updateClock(){
 setInterval(updateClock,1000);
 updateClock();
 
-/* DATA */
+/* LOAD DATA */
 fetch(API_URL)
   .then(res => res.json())
   .then(data => {
@@ -75,14 +81,26 @@ fetch(API_URL)
     const arr = document.getElementById("arr");
 
     dep.innerHTML = `
-      <tr><th>PENERBANGAN</th><th>TUJUAN</th><th>JADWAL</th><th>STATUS</th></tr>
+      <tr>
+        <th>PENERBANGAN</th>
+        <th>TUJUAN</th>
+        <th>JADWAL</th>
+        <th>STATUS</th>
+      </tr>
     `;
+
     arr.innerHTML = `
-      <tr><th>PENERBANGAN</th><th>ASAL</th><th>JADWAL</th><th>STATUS</th></tr>
+      <tr>
+        <th>PENERBANGAN</th>
+        <th>ASAL</th>
+        <th>JADWAL</th>
+        <th>STATUS</th>
+      </tr>
     `;
 
     data.forEach(f => {
       const statusClass = (f.status || "").toLowerCase().replace(/\s/g,"-");
+
       const row = `
         <tr>
           <td>${f.maskapai}</td>
@@ -91,10 +109,22 @@ fetch(API_URL)
           <td class="status ${statusClass}">${f.status}</td>
         </tr>
       `;
+
       if (f.jenis === "keberangkatan") dep.innerHTML += row;
       if (f.jenis === "kedatangan") arr.innerHTML += row;
     });
+  })
+  .catch(err => {
+    console.error(err);
+    document.body.innerHTML += "<p style='text-align:center'>Gagal memuat data</p>";
   });
+
+/* FULLSCREEN AUTO (TV / KIOSK) */
+document.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(()=>{});
+  }
+});
 </script>
 
 </body>
