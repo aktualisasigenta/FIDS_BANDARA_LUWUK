@@ -18,9 +18,7 @@ const airlineLogo = {
 };
 
 fetch(API_URL)
-
 .then(res => res.json())
-
 .then(data => {
 
 data.forEach(f => {
@@ -67,4 +65,4 @@ setInterval(() => {
 document.getElementById("clock").innerText =
 new Date().toLocaleTimeString("id-ID");
 
-}, 1000);
+},1000);
