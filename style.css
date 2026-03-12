@@ -189,3 +189,13 @@ td {
     font-size: 11px;
   }
 }
+.flight{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+}
+
+.logo{
+height:28px;
+}
