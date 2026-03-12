@@ -74,7 +74,7 @@ html, body {
 }
 
 /* =========================
-   TABLE WRAPPER (ANTI OVERFLOW)
+   TABLE WRAPPER
 ========================= */
 .table-wrap {
   flex: 1;
@@ -97,6 +97,21 @@ td {
   text-align: center;
   border-bottom: 1px solid rgba(255,255,255,0.4);
   white-space: nowrap;
+}
+
+/* =========================
+   LOGO MASKAPAI
+========================= */
+.flight{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.logo{
+  height:28px;
+  width:auto;
 }
 
 /* =========================
@@ -174,6 +189,10 @@ td {
   th, td {
     padding: 6px;
   }
+
+  .logo{
+    height:22px;
+  }
 }
 
 /* =========================
@@ -187,5 +206,9 @@ td {
 
   th {
     font-size: 11px;
+  }
+
+  .logo{
+    height:18px;
   }
 }
